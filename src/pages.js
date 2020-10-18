@@ -1,3 +1,4 @@
+const db = require("./database/db");
 const Database = require("./database/db");
 const saveOrphanage = require("./database/saveOrphanage");
 
@@ -14,12 +15,11 @@ module.exports = {
       const results = await db.all(
         `SELECT * FROM orphanages WHERE id = "${id}"`
       );
-
       const orphanage = results[0];
 
       orphanage.images = orphanage.images.split(",");
       orphanage.firstImage = orphanage.images[0];
-      orphanage.images.splice(0,1);
+
       if (orphanage.open_on_weekends == "0") {
         orphanage.open_on_weekends = false;
       } else {
@@ -29,18 +29,21 @@ module.exports = {
       return res.render("orphanage", { orphanage });
     } catch (error) {
       console.log(error);
-      return res.send("Erro no banco de dados");
+      return res.send("error bd hehe");
     }
+
+    // return res.render('orphanage');
   },
 
   async orphanages(req, res) {
     try {
       const db = await Database;
+
       const orphanages = await db.all("SELECT * FROM orphanages");
       return res.render("orphanages", { orphanages });
     } catch (error) {
       console.log(error);
-      return res.send("Erro no banco de dados");
+      return res.send("Erro no banco de dados!");
     }
   },
 
@@ -50,12 +53,12 @@ module.exports = {
 
   async saveOrphanage(req, res) {
     const fields = req.body;
-
-    if (Object.values(fields).includes("")) {
-      return res.send("Todos os campos devem ser preenchidos");
-    }
-
+    // validar se todos os campos estão preenchidos
+    // if (Object.values(fields).includes("")) {
+    //   return res.send("Todos os campos devem ser preenchidos!");
+    // }
     try {
+      // salvar um orfanato
       const db = await Database;
       await saveOrphanage(db, {
         lat: fields.lat,
@@ -68,11 +71,13 @@ module.exports = {
         opening_hours: fields.opening_hours,
         open_on_weekends: fields.open_on_weekends,
       });
-
+      console.log()
+      //redirecionamento
       return res.redirect("/orphanages");
+
     } catch (error) {
       console.log(error);
-      return res.send("Erro no banco de dados");
+      return res.send("erro no banco de dados");
     }
   },
 };

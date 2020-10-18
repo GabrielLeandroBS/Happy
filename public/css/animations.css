@@ -1,3 +1,4 @@
+/* animações */
 @keyframes up {
   from {
     opacity: 0;
@@ -31,14 +32,15 @@
 }
 
 .animate-up {
-  animation-name: up;
-  animation-duration: 300ms;
-  animation-fill-mode: backwards;
+  /* animation-name: up;
+    animation-duration: 300ms;
+    animation-fill-mode: backwards; */
+
+  animation: up 300ms backwards;
 }
 
 .animate-right {
-  animation-name: right;
-  animation-duration: 300ms;
+  animation: right 300ms backwards;
 }
 
 .animate-appear {
